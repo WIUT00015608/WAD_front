@@ -8,8 +8,15 @@
 
 # Node
 /node_modules
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*              # ✅ Added for pnpm
+package-lock.json            # ✅ Optional: ignore lock files if team prefers yarn or pnpm only
+
+# Environment files
+.env                         # ✅ Added: common practice to ignore env variables
+.env.*                       # ✅ Also ignore all variants like .env.production
 
 # IDEs and editors
 .idea/
@@ -19,6 +26,9 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+*.swp                        # ✅ Added for vim swap files
+*.code-workspace             # ✅ VS Code workspace files
+*.iml                        # ✅ IntelliJ files
 
 # Visual Studio Code
 .vscode/*
@@ -31,12 +41,47 @@ yarn-error.log
 # Miscellaneous
 /.angular/cache
 .sass-cache/
-/connect.lock
+.connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
 /typings
+bower_components/            # ✅ Older frontend package manager
+jspm_packages/               # ✅ JSPM, if ever used
+.nyc_output/                 # ✅ Code coverage output
+report-*.json                # ✅ Cypress or test reports
+karma-results.html           # ✅ Karma test result output
 
 # System files
 .DS_Store
 Thumbs.db
+ehthumbs.db                  # ✅ Windows thumbnails
+Desktop.ini                  # ✅ Windows desktop metadata
+
+# Logs and debug
+*.log                        # ✅ General log files
+logs/
+log/
+debug.log
+
+# Angular SSR (if used)
+/.server/                    # ✅ Angular Universal server output
+/hydration/                  # ✅ Angular hydration build
+
+# Firebase (if used)
+.firebase/                   # ✅ Firebase project files
+.firebaserc                  # ✅ Firebase RC file (optional)
+
+# Docker (if used)
+Dockerfile                   # ✅ Optional: only if generated temporarily
+docker-compose.*.yml         # ✅ Ignore environment-specific compose files
+
+# Git backup files
+*.orig                       # ✅ Merge conflict backups
+
+# VS Live Share
+.vsls.json                   # ✅ Visual Studio Live Share
+
+# Browserslist cache
+.browserslistrc              # ✅ Optional if not committed
+.browserslistrc.cjs          # ✅ Config format
