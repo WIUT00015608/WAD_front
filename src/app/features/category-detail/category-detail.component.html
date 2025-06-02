@@ -1,1 +1,128 @@
-<p>category-detail works!</p>
+<div class="container mt-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <!-- Category Details -->
+  <div *ngIf="!loading && !error && category">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <button class="btn btn-outline-secondary me-3" (click)="onBackToList()">
+          <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        <h2 class="d-inline">{{ category.name }}</h2>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="onEditCategory()">
+          <i class="fas fa-edit"></i> Edit Category
+        </button>
+        <button class="btn btn-danger" (click)="onDeleteCategory()">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Information Card -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Category Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Name:</strong> {{ category.name }}</p>
+                <p><strong>Description:</strong> {{ category.description }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Created:</strong> {{ category.createdDate | date:'medium' }}</p>
+                <p><strong>Total Contacts:</strong> {{ category.contacts?.length || 0 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contacts Section -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Contacts in this Category</h5>
+        <button class="btn btn-success btn-sm" (click)="onAddContact()">
+          <i class="fas fa-plus"></i> Add Contact
+        </button>
+      </div>
+      <div class="card-body">
+        <!-- Contacts List -->
+        <div *ngIf="category.contacts && category.contacts.length > 0" class="row">
+          <div *ngFor="let contact of category.contacts" class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-title">{{ contact.firstName }} {{ contact.lastName }}</h6>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <i class="fas fa-envelope"></i> {{ contact.email }}<br>
+                    <i class="fas fa-phone"></i> {{ contact.phone }}<br>
+                    <i class="fas fa-map-marker-alt"></i> {{ contact.address }}
+                  </small>
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    Created: {{ contact.createdDate | date:'short' }}<br>
+                    <span *ngIf="contact.updatedDate">
+                      Updated: {{ contact.updatedDate | date:'short' }}
+                    </span>
+                  </small>
+                </p>
+              </div>
+              <div class="card-footer">
+                <div class="btn-group w-100" role="group">
+                  <button 
+                    class="btn btn-outline-primary btn-sm" 
+                    (click)="onEditContact(contact.id!)">
+                    Edit
+                  </button>
+                  <button 
+                    class="btn btn-outline-danger btn-sm" 
+                    (click)="onDeleteContact(contact)">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!category.contacts || category.contacts.length === 0" class="text-center py-5">
+          <i class="fas fa-users fa-3x text-muted mb-3"></i>
+          <h5>No Contacts Found</h5>
+          <p>This category doesn't have any contacts yet.</p>
+          <button class="btn btn-primary" (click)="onAddContact()">
+            <i class="fas fa-plus"></i> Add First Contact
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Not Found -->
+  <div *ngIf="!loading && !error && !category" class="text-center mt-5">
+    <h4>Category Not Found</h4>
+    <p>The category you're looking for doesn't exist.</p>
+    <button class="btn btn-primary" (click)="onBackToList()">
+      Back to Categories
+    </button>
+  </div>
+</div>

@@ -1,1 +1,174 @@
-<p>contact-list works!</p>
+<div class="container mt-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Contact Management</h2>
+    <button class="btn btn-primary" (click)="onCreateContact()">
+      <i class="fas fa-plus"></i> Add New Contact
+    </button>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Search Input -->
+        <div class="col-md-6">
+          <label for="search" class="form-label">Search Contacts</label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="search"
+              class="form-control"
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+              placeholder="Search by name, email, phone, or address...">
+            <button class="btn btn-outline-secondary" type="button" (click)="onSearch()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="col-md-4">
+          <label for="categoryFilter" class="form-label">Filter by Category</label>
+          <select
+            id="categoryFilter"
+            class="form-select"
+            [(ngModel)]="selectedCategoryId"
+            (change)="onCategoryFilter()">
+            <option [value]="null">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Clear Filters -->
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+            <i class="fas fa-times"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <!-- Results Summary -->
+  <div *ngIf="!loading && !error" class="mb-3">
+    <small class="text-muted">
+      Showing {{ getPaginatedContacts().length }} of {{ filteredContacts.length }} contacts
+      <span *ngIf="filteredContacts.length !== contacts.length">
+        (filtered from {{ contacts.length }} total)
+      </span>
+    </small>
+  </div>
+
+  <!-- Contacts Table -->
+  <div *ngIf="!loading && !error" class="card">
+    <div class="card-body">
+      <div *ngIf="filteredContacts.length > 0" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Category</th>
+              <th>Created</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contact of getPaginatedContacts()">
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="avatar-circle me-2">
+                    {{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}
+                  </div>
+                  <div>
+                    <strong>{{ contact.firstName }} {{ contact.lastName }}</strong>
+                  </div>
+                </div>
+              </td>
+              <td>{{ contact.email }}</td>
+              <td>{{ contact.phone }}</td>
+              <td>
+                <span class="badge bg-secondary">
+                  {{ getCategoryName(contact.categoryId) }}
+                </span>
+              </td>
+              <td>{{ contact.createdDate | date:'short' }}</td>
+              <td class="text-center">
+                <div class="btn-group" role="group">
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="onViewContact(contact.id!)"
+                    title="View Details">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-success btn-sm"
+                    (click)="onEditContact(contact.id!)"
+                    title="Edit Contact">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="onDeleteContact(contact)"
+                    title="Delete Contact">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredContacts.length === 0" class="text-center py-5">
+        <i class="fas fa-address-book fa-3x text-muted mb-3"></i>
+        <h5>No Contacts Found</h5>
+        <p *ngIf="searchTerm || selectedCategoryId">
+          Try adjusting your search criteria or clearing filters.
+        </p>
+        <p *ngIf="!searchTerm && !selectedCategoryId">
+          You haven't added any contacts yet.
+        </p>
+        <button class="btn btn-primary" (click)="onCreateContact()">
+          <i class="fas fa-plus"></i> Add First Contact
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <nav *ngIf="!loading && !error && totalPages > 1" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="onPageChange(currentPage - 1)">Previous</button>
+      </li>
+      <li *ngFor="let page of getPageNumbers()" 
+          class="page-item" 
+          [class.active]="page === currentPage">
+        <button class="page-link" (click)="onPageChange(page)">{{ page }}</button>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button class="page-link" (click)="onPageChange(currentPage + 1)">Next</button>
+      </li>
+    </ul>
+  </nav>
+</div>

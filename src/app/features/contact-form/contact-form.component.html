@@ -1,1 +1,161 @@
-<p>contact-form works!</p>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ isEditMode ? 'Edit Contact' : 'Create New Contact' }}</h2>
+        <button class="btn btn-outline-secondary" (click)="onCancel()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close float-end" (click)="error = null"></button>
+      </div>
+
+      <!-- Form -->
+      <div *ngIf="!loading" class="card">
+        <div class="card-body">
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+            
+            <!-- Name Row -->
+            <div class="row">
+              <!-- First Name -->
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label">
+                  First Name <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  class="form-control"
+                  formControlName="firstName"
+                  [class.is-invalid]="isFieldInvalid('firstName')"
+                  placeholder="Enter first name">
+                <div *ngIf="isFieldInvalid('firstName')" class="invalid-feedback">
+                  {{ getFieldError('firstName') }}
+                </div>
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label">
+                  Last Name <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  class="form-control"
+                  formControlName="lastName"
+                  [class.is-invalid]="isFieldInvalid('lastName')"
+                  placeholder="Enter last name">
+                <div *ngIf="isFieldInvalid('lastName')" class="invalid-feedback">
+                  {{ getFieldError('lastName') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">
+                Email Address <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="isFieldInvalid('email')"
+                placeholder="Enter email address">
+              <div *ngIf="isFieldInvalid('email')" class="invalid-feedback">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+
+            <!-- Phone Field -->
+            <div class="mb-3">
+              <label for="phone" class="form-label">
+                Phone Number <span class="text-danger">*</span>
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                class="form-control"
+                formControlName="phone"
+                [class.is-invalid]="isFieldInvalid('phone')"
+                placeholder="Enter phone number">
+              <div *ngIf="isFieldInvalid('phone')" class="invalid-feedback">
+                {{ getFieldError('phone') }}
+              </div>
+            </div>
+
+            <!-- Address Field -->
+            <div class="mb-3">
+              <label for="address" class="form-label">
+                Address <span class="text-danger">*</span>
+              </label>
+              <textarea
+                id="address"
+                class="form-control"
+                formControlName="address"
+                [class.is-invalid]="isFieldInvalid('address')"
+                rows="3"
+                placeholder="Enter full address">
+              </textarea>
+              <div *ngIf="isFieldInvalid('address')" class="invalid-feedback">
+                {{ getFieldError('address') }}
+              </div>
+            </div>
+
+            <!-- Category Field -->
+            <div class="mb-3">
+              <label for="categoryId" class="form-label">
+                Category <span class="text-danger">*</span>
+              </label>
+              <select
+                id="categoryId"
+                class="form-select"
+                formControlName="categoryId"
+                [class.is-invalid]="isFieldInvalid('categoryId')">
+                <option value="">Select a category</option>
+                <option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </option>
+              </select>
+              <div *ngIf="isFieldInvalid('categoryId')" class="invalid-feedback">
+                {{ getFieldError('categoryId') }}
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="onCancel()"
+                [disabled]="saving">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="contactForm.invalid || saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isEditMode ? 'Update Contact' : 'Create Contact' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

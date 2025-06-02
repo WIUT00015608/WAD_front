@@ -1,1 +1,207 @@
-<p>contact-detail works!</p>
+<div class="container mt-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <!-- Contact Details -->
+  <div *ngIf="!loading && !error && contact">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <button class="btn btn-outline-secondary me-3" (click)="onBackToList()">
+          <i class="fas fa-arrow-left"></i> Back to Contacts
+        </button>
+        <div class="d-flex align-items-center">
+          <div class="avatar-circle-large me-3">
+            {{ getInitials() }}
+          </div>
+          <div>
+            <h2 class="mb-0">{{ contact.firstName }} {{ contact.lastName }}</h2>
+            <p class="text-muted mb-0">Contact Details</p>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="onEditContact()">
+          <i class="fas fa-edit"></i> Edit Contact
+        </button>
+        <button class="btn btn-danger" (click)="onDeleteContact()">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Contact Information Card -->
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Contact Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted">Email Address</label>
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <p class="mb-0">{{ contact.email }}</p>
+                  </div>
+                  <div class="btn-group ms-2">
+                    <button 
+                      class="btn btn-outline-primary btn-sm" 
+                      (click)="sendEmail()"
+                      title="Send Email">
+                      <i class="fas fa-envelope"></i>
+                    </button>
+                    <button 
+                      class="btn btn-outline-secondary btn-sm" 
+                      (click)="copyToClipboard(contact.email)"
+                      title="Copy Email">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phone -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted">Phone Number</label>
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <p class="mb-0">{{ contact.phone }}</p>
+                  </div>
+                  <div class="btn-group ms-2">
+                    <button 
+                      class="btn btn-outline-success btn-sm" 
+                      (click)="callPhone()"
+                      title="Call Phone">
+                      <i class="fas fa-phone"></i>
+                    </button>
+                    <button 
+                      class="btn btn-outline-secondary btn-sm" 
+                      (click)="copyToClipboard(contact.phone)"
+                      title="Copy Phone">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div class="col-12 mb-3">
+                <label class="form-label text-muted">Address</label>
+                <div class="d-flex align-items-start">
+                  <div class="flex-grow-1">
+                    <p class="mb-0">{{ contact.address }}</p>
+                  </div>
+                  <div class="btn-group ms-2">
+                    <button 
+                      class="btn btn-outline-info btn-sm" 
+                      (click)="openMaps()"
+                      title="Open in Maps">
+                      <i class="fas fa-map-marker-alt"></i>
+                    </button>
+                    <button 
+                      class="btn btn-outline-secondary btn-sm" 
+                      (click)="copyToClipboard(contact.address)"
+                      title="Copy Address">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-muted">Category</label>
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-secondary me-2">{{ category?.name || 'Loading...' }}</span>
+                  <button 
+                    *ngIf="category"
+                    class="btn btn-outline-primary btn-sm" 
+                    (click)="onViewCategory()"
+                    title="View Category">
+                    <i class="fas fa-external-link-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metadata Card -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Record Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label text-muted">Contact ID</label>
+              <p class="mb-0">#{{ contact.id }}</p>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-muted">Created Date</label>
+              <p class="mb-0">{{ contact.createdDate | date:'medium' }}</p>
+            </div>
+            
+            <div *ngIf="contact.updatedDate" class="mb-3">
+              <label class="form-label text-muted">Last Updated</label>
+              <p class="mb-0">{{ contact.updatedDate | date:'medium' }}</p>
+            </div>
+
+            <div *ngIf="category" class="mb-3">
+              <label class="form-label text-muted">Category Description</label>
+              <p class="mb-0 small">{{ category.description }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Quick Actions</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <button class="btn btn-outline-primary" (click)="sendEmail()">
+                <i class="fas fa-envelope me-2"></i>Send Email
+              </button>
+              <button class="btn btn-outline-success" (click)="callPhone()">
+                <i class="fas fa-phone me-2"></i>Call Phone
+              </button>
+              <button class="btn btn-outline-info" (click)="openMaps()">
+                <i class="fas fa-map-marker-alt me-2"></i>View on Map
+              </button>
+              <hr>
+              <button class="btn btn-primary" (click)="onEditContact()">
+                <i class="fas fa-edit me-2"></i>Edit Contact
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Not Found -->
+  <div *ngIf="!loading && !error && !contact" class="text-center mt-5">
+    <h4>Contact Not Found</h4>
+    <p>The contact you're looking for doesn't exist.</p>
+    <button class="btn btn-primary" (click)="onBackToList()">
+      Back to Contacts
+    </button>
+  </div>
+</div>

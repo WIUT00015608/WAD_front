@@ -1,0 +1,89 @@
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.btn {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      color: #6c757d;
+
+      small {
+        color: #adb5bd;
+      }
+    }
+  }
+
+  .card-footer {
+    background-color: #f8f9fa;
+    border-top: none;
+    padding: 0.75rem 1.25rem;
+
+    .btn-group {
+      .btn {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+    }
+  }
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: #007bff;
+  margin-top: 2rem;
+}
+
+.alert-danger {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+  }
+}
