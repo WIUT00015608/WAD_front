@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Categories</h2>
+    <button class="btn btn-primary" (click)="onCreateCategory()">
+      <i class="fas fa-plus"></i> Add Category
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <!-- Categories Grid -->
+  <div *ngIf="!loading && !error" class="row">
+    <div *ngFor="let category of categories" class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ category.name }}</h5>
+          <p class="card-text">{{ category.description }}</p>
+          <p class="card-text">
+            <small class="text-muted">
+              Contacts: {{ category.contacts?.length || 0 }}
+            </small>
+          </p>
+          <p class="card-text">
+            <small class="text-muted">
+              Created: {{ category.createdDate | date:'short' }}
+            </small>
+          </p>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group w-100" role="group">
+            <button 
+              class="btn btn-outline-primary" 
+              (click)="onViewCategory(category.id!)">
+              View
+            </button>
+            <button 
+              class="btn btn-outline-secondary" 
+              (click)="onEditCategory(category.id!)">
+              Edit
+            </button>
+            <button 
+              class="btn btn-outline-danger" 
+              (click)="onDeleteCategory(category)">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && categories.length === 0" class="text-center mt-5">
+    <h4>No Categories Found</h4>
+    <p>Get started by creating your first category.</p>
+    <button class="btn btn-primary" (click)="onCreateCategory()">
+      <i class="fas fa-plus"></i> Create Category
+    </button>
+  </div>
+</div>
