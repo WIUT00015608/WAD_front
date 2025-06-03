@@ -1,7 +1,7 @@
 # Angular Frontend for Coursework (Student ID: 00015608)
 
 ## Project Overview
-This is the frontend of a coursework (CW) project developed by the student with ID **00015608**. The application is built using **Angular CLI 19.2.10** and serves as the user interface for [insert brief description of the project's purpose, e.g., a student management system, coursework submission portal, etc.]. The frontend communicates with a backend API that connects to a SQL Server database for data storage and management. This project demonstrates the student's ability to design and implement a modern web application with Angular.
+This application was developed for Web Application module, as coursework portfolio project @ WIUT by student ID: 00015608. The application is built using **Angular CLI 19.2.10**. The frontend communicates with a backend API that connects to a SQL Server database for data storage and management. This project demonstrates the student's ability to design and implement a modern web application with Angular.
 
 ## Features
 - **Angular 19**: Leverages the latest Angular framework for a responsive and scalable frontend.
